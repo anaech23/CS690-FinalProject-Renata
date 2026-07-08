@@ -16,24 +16,6 @@ namespace HarlowStTattooStudio
         static int nextLeaveId = 1;
 
 
-        // In-memory lists to store data for Clients, Appointments, Artists, Payments, and Leaves
-        static List<Client> clients = new List<Client>();
-
-        static List<Appointment> appointments = new List<Appointment>();
-
-        static List<Artist> artists = new List<Artist>()
-        {
-            new Artist { ArtistId = 1, ArtistFirstName = "Memo", ArtistLastName = "Ochoa" },
-            new Artist { ArtistId = 2, ArtistFirstName = "Alex", ArtistLastName = "Morgan" },
-            new Artist { ArtistId = 3, ArtistFirstName = "Harry", ArtistLastName = "Kane" },
-            new Artist { ArtistId = 4, ArtistFirstName = "Scarlett", ArtistLastName = "Camberos" },
-        };
-
-
-        static List<Payment> payments = new List<Payment>();
-
-        static List<Leave> leaves = new List<Leave>();
-
 
         static void Main(string[] args)
         {
