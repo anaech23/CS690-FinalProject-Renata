@@ -53,5 +53,21 @@ namespace HarlowStTattooStudio.Services
 
             return true; // Appointment scheduled successfully
         }
+
+        public IEnumerable<Appointment> GetAll()
+        {
+            return _studioData.Appointments;
+        }
+        
+        public bool CancelAppointment(int appointmentId)
+        {
+            var app = _studioData.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
+
+            if (app == null || app.Status == AppointmentStatus.Cancelled)
+                return false;
+
+            app.Status = AppointmentStatus.Cancelled;
+            return true;
+        }
     }
 }
