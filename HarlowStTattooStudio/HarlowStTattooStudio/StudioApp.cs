@@ -271,7 +271,8 @@ namespace HarlowStTattooStudio
                             ClientId = clientId,
                             ArtistId = artistId,
                             AppointmentStart = appointmentStart,
-                            AppointmentEnd = appointmentEnd
+                            AppointmentEnd = appointmentEnd,
+                            Status = AppointmentStatus.Pending
                         };
 
 
@@ -538,6 +539,8 @@ namespace HarlowStTattooStudio
                         {
                             Console.WriteLine("Unable to record deposit. Check appointment ID.");
                         }
+
+                        bool ConfirmAppointment = appointmentService.ConfirmAppointment(depositAppointmentId);
 
                         Console.WriteLine("Press any key to return...");
                         Console.ReadKey();
