@@ -6,7 +6,8 @@ namespace HarlowStTattooStudio.DomainModel
 {
     public enum AppointmentStatus
     {
-        Scheduled = 0,
-        Cancelled = 1
+        Pending = 0,
+        Scheduled = 1,
+        Cancelled = 2,
     }
 }

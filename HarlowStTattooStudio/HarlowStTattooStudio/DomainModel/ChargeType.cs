@@ -6,7 +6,7 @@ namespace HarlowStTattooStudio.DomainModel
 {
     public enum ChargeType
     {
-        Session = 0,
+        FullPayment = 0,
         Deposit = 1
     }
 }

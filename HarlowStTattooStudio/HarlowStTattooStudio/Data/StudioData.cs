@@ -17,7 +17,6 @@ namespace HarlowStTattooStudio.Data
         // ID Counters
         public int NextClientId { get; set; } = 1;
         public int NextAppointmentId { get; set; } = 1;
-        public int NextArtistId { get; set; } = 5;
         public int NextPaymentId { get; set; } = 1;
         public int NextLeaveId { get; set; } = 1;
 

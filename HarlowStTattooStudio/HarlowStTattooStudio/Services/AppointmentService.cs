@@ -1,9 +1,7 @@
 ﻿using HarlowStTattooStudio.Data;
+using HarlowStTattooStudio.DomainModel;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using HarlowStTattooStudio.DomainModel;
 using System.Linq;
 
 namespace HarlowStTattooStudio.Services
@@ -17,56 +15,129 @@ namespace HarlowStTattooStudio.Services
             _studioData = studioData;
         }
 
+
+        // Create a new appointment request
         public bool ScheduleAppointment(Appointment newAppointment)
         {
-            // Check for deposit payment
-            bool hasPaidDeposit = _studioData.Payments.Any(p =>
-                p.ClientId == newAppointment.ClientId && p.PaymentType >= PaymentType.Deposit);
-            if (!hasPaidDeposit)
+            // Check if this is a follow-up appointment
+            if (newAppointment.FollowupToAppointmentId.HasValue)
             {
-                return false; // Cannot schedule appointment without deposit payment
+                var originalAppointment = _studioData.Appointments.FirstOrDefault(a => a.AppointmentId == newAppointment.FollowupToAppointmentId.Value);
+
+                // Original appointment must exist
+                if (originalAppointment == null)
+                {
+                    return false;
+                }
+
+                // Cannot follow up a cancelled appointment
+                if (originalAppointment.Status == AppointmentStatus.Cancelled)
+                {
+                    return false;
+                }
+
+                // Follow-up must belong to the same client
+                if (originalAppointment.ClientId != newAppointment.ClientId)
+                {
+                    return false;
+                }
             }
+
 
             // Check if artist is on leave
-            bool isArtistOnLeave = _studioData.Leaves.Any(l =>
-                l.ArtistId == newAppointment.ArtistId &&
-                newAppointment.AppointmentDate >= l.LeaveStart &&
-                newAppointment.AppointmentDate <= l.LeaveEnd);
+            bool isArtistOnLeave = _studioData.Leaves.Any(l => l.ArtistId == newAppointment.ArtistId && newAppointment.AppointmentStart >= l.LeaveStart && newAppointment.AppointmentEnd <= l.LeaveEnd);
+
             if (isArtistOnLeave)
             {
-                return false; // Cannot schedule appointment if artist is on leave
+                return false;
             }
 
-            bool hasOverlap = _studioData.Appointments.Any(a =>
-                a.ArtistId == newAppointment.ArtistId &&
-                a.Status != DomainModel.AppointmentStatus.Cancelled &&
-                newAppointment.AppointmentStart < a.AppointmentEnd &&
-                newAppointment.AppointmentEnd > a.AppointmentStart);
+
+            // Check for overlapping appointments
+            bool hasOverlap = _studioData.Appointments.Any(a => a.ArtistId == newAppointment.ArtistId && a.Status != AppointmentStatus.Cancelled && newAppointment.AppointmentStart < a.AppointmentEnd && newAppointment.AppointmentEnd > a.AppointmentStart);
+
             if (hasOverlap)
             {
-                return false; // Cannot schedule appointment due to overlap
+                return false;
             }
 
+
+            // Create appointment as pending until deposit is received
             newAppointment.AppointmentId = _studioData.NextAppointmentId++;
-            newAppointment.Status = DomainModel.AppointmentStatus.Scheduled;
+            newAppointment.Status = AppointmentStatus.Pending;
+
             _studioData.Appointments.Add(newAppointment);
 
-            return true; // Appointment scheduled successfully
+            return true;
         }
 
+
+        // Confirm appointment after deposit payment
+        public bool ConfirmAppointment(int appointmentId)
+        {
+            var appointment = _studioData.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
+
+            if (appointment == null)
+            {
+                return false;
+            }
+
+            // Check for confirmed deposit
+            bool hasDeposit = _studioData.Payments.Any(p => p.AppointmentId == appointmentId && p.ChargeType == ChargeType.Deposit && p.IsConfirmed);
+
+            if (!hasDeposit)
+            {
+                return false;
+            }
+
+            appointment.Status = AppointmentStatus.Scheduled;
+
+            return true;
+        }
+
+
+        // Get all appointments
         public IEnumerable<Appointment> GetAll()
         {
             return _studioData.Appointments;
         }
-        
+
+
+        // Get past appointments for follow-up selection
+        public IEnumerable<Appointment> GetPastAppointments(int clientId)
+        {
+            return _studioData.Appointments.Where(a => a.ClientId == clientId && a.Status != AppointmentStatus.Cancelled && a.AppointmentEnd < DateTime.Now) .OrderByDescending(a => a.AppointmentStart);
+        }
+
+
+        // Get the appointment that a follow-up is linked to
+        public Appointment GetOriginalAppointment(int appointmentId)
+        {
+            var appointment = _studioData.Appointments
+                .FirstOrDefault(a => a.AppointmentId == appointmentId);
+
+            if (appointment == null ||
+                !appointment.FollowupToAppointmentId.HasValue)
+            {
+                return null;
+            }
+
+            return _studioData.Appointments.FirstOrDefault(a =>a.AppointmentId == appointment.FollowupToAppointmentId.Value);
+        }
+
+
+        // Cancel appointment
         public bool CancelAppointment(int appointmentId)
         {
-            var app = _studioData.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
+            var appointment = _studioData.Appointments.FirstOrDefault(a => a.AppointmentId == appointmentId);
 
-            if (app == null || app.Status == AppointmentStatus.Cancelled)
+            if (appointment == null || appointment.Status == AppointmentStatus.Cancelled)
+            {
                 return false;
+            }
 
-            app.Status = AppointmentStatus.Cancelled;
+            appointment.Status = AppointmentStatus.Cancelled;
+
             return true;
         }
     }

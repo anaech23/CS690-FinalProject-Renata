@@ -1,9 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using HarlowStTattooStudio;
 using HarlowStTattooStudio.Services;
+using HarlowStTattooStudio.Data;
 
 // Setup DI Container
 var services = new ServiceCollection();
+
+// Register StudioData as a singleton
+services.AddSingleton<StudioData>();
 
 // Register services
 services.AddSingleton<ClientService>();
