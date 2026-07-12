@@ -1,3 +1,29 @@
-.vs/ 
-bin/ 
-obj/
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build Results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Visual Studio metadata
+.vs/
+.cache/
+
+# Test Results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+
+# NuGet packages (if using local folders)
+packages/
+
+# OS junk
+.DS_Store
+Thumbs.db
