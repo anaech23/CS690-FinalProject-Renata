@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using HarlowStTattooStudio;
-using HarlowStTattooStudio.Services;
+﻿using HarlowStTattooStudio;
 using HarlowStTattooStudio.Data;
+using HarlowStTattooStudio.Menus;
+using HarlowStTattooStudio.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 // Setup DI Container
 var services = new ServiceCollection();
@@ -16,6 +17,13 @@ services.AddSingleton<AppointmentService>();
 services.AddSingleton<LeaveService>();
 services.AddSingleton<PaymentService>();
 services.AddSingleton<ReportService>();
+
+// Register Menus
+services.AddSingleton<ClientMenu>();
+services.AddSingleton<AppointmentMenu>();
+services.AddSingleton<LeaveMenu>();
+services.AddSingleton<PaymentMenu>();
+services.AddSingleton<ReportMenu>();
 
 // Register App class
 services.AddSingleton<StudioApp>();
