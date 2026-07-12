@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="HarlowStTattooStudio.Tests/HarlowStTattooStudio.Tests.csproj" Id="3e5a56c1-ab09-454d-983d-10d9a6e6ea96" />
   <Project Path="HarlowStTattooStudio/HarlowStTattooStudio.csproj" />
 </Solution>
