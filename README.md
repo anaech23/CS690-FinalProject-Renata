@@ -1,4 +1,4 @@
-# Harlow Street Tattoo Studio Management System v2.0.0
+# Harlow Street Tattoo Studio Management System v3.0.0
 
 An interactive, conflict-aware terminal application designed to manage tattoo studio appointments, clients, artist leave, payments, and generate reports, built on **.NET 10**.
 
