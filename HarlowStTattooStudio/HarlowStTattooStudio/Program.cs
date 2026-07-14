@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 // Setup DI Container
 var services = new ServiceCollection();
 
-// Register StudioData as a singleton
-services.AddSingleton<StudioData>();
+// Register StudioData as a singleton using Load()
+services.AddSingleton<StudioData>(provider => StudioData.Load());
 
 // Register services
 services.AddSingleton<ClientService>();

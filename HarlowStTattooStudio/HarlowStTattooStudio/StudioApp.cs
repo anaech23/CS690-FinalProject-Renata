@@ -42,6 +42,7 @@ namespace HarlowStTattooStudio
                     case "4": paymentMenu.Show(); break;
                     case "5": reportMenu.Show(); break;
                     case "6": running = false; break;
+                    default: Console.WriteLine(); break;
                 }
             }
         }

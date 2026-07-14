@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.IO;
+using System.Text.Json;
+    
 namespace HarlowStTattooStudio.Data
 {
     public class StudioData
@@ -29,6 +31,28 @@ namespace HarlowStTattooStudio.Data
                 new Artist { ArtistId = 3, ArtistFirstName = "Martin", ArtistLastName = "Odegaard" },
                 new Artist { ArtistId = 4, ArtistFirstName = "Kiana", ArtistLastName = "Palacios" },
             };
+        }
+
+        private static readonly string FileName = "studio_data.json";
+
+        public void Save()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+
+            string jsonString = JsonSerializer.Serialize(this, options);
+
+            File.WriteAllText(FileName, jsonString);
+        }
+        
+        public static StudioData Load()
+        {
+            if (!File.Exists(FileName))
+            {
+                return new StudioData();
+            }
+
+            string jsonString = File.ReadAllText(FileName);
+            return JsonSerializer.Deserialize<StudioData>(jsonString);
         }
 
     }
