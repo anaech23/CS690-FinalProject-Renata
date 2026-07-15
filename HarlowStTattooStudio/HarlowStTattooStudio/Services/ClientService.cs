@@ -26,6 +26,7 @@ namespace HarlowStTattooStudio.Services
              }
              newClient.ClientId = _studioData.NextClientId++; // Assign a new ClientId
              _studioData.Clients.Add(newClient);
+            _studioData.Save();
              return true; // Client added successfully   
         }
 

@@ -33,6 +33,7 @@ namespace HarlowStTattooStudio.Services
                 ChargeType = ChargeType.Deposit
             };
             _studioData.Payments.Add(payment);
+            _studioData.Save();
        
             return true;
         }
@@ -59,7 +60,7 @@ namespace HarlowStTattooStudio.Services
                 ChargeType = ChargeType.FullPayment
             };
             _studioData.Payments.Add(payment);
-
+            _studioData.Save();
             return true;
         }
 

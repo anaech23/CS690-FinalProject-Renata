@@ -67,7 +67,7 @@ namespace HarlowStTattooStudio.Services
             newAppointment.Status = AppointmentStatus.Pending;
 
             _studioData.Appointments.Add(newAppointment);
-
+            _studioData.Save();
             return true;
         }
 
@@ -91,7 +91,7 @@ namespace HarlowStTattooStudio.Services
             }
 
             appointment.Status = AppointmentStatus.Scheduled;
-
+            _studioData.Save();
             return true;
         }
 
@@ -137,7 +137,7 @@ namespace HarlowStTattooStudio.Services
             }
 
             appointment.Status = AppointmentStatus.Cancelled;
-
+            _studioData.Save();
             return true;
         }
     }

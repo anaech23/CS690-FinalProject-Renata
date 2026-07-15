@@ -36,6 +36,8 @@ namespace HarlowStTattooStudio.Services
 
             newLeave.LeaveId = _studioData.NextLeaveId++; // Assign a new LeaveId
             _studioData.Leaves.Add(newLeave);
+            _studioData.Save();
+
             return true; // Leave scheduled successfully
         }
 
